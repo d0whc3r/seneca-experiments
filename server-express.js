@@ -11,9 +11,15 @@ const config = {
   routes: [LoginRoute],
   adapter: require('seneca-web-adapter-express'),
   context: Express(),
+  // options: { parseBody: true },
 };
 
-const seneca = Seneca({ debug: { undead: true } })
+const seneca = Seneca({
+  debug: {
+    // undead: process.env.NODE_ENV === 'production',
+    undead: false,
+  },
+})
     .error(function(err) {
       console.error('FATAL ERROR!', err);
     })

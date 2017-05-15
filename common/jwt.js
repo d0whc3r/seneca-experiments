@@ -1,27 +1,37 @@
 import jwt from 'jwt-simple';
 
-export default class Jwt {
+export default class {
 
-  static KEY = 'superKeyPassword';
-  _COOKIE = 'auth';
+  constructor() {
+    this._KEY = 'superKeyPassword';
+    this._COOKIE = 'auth';
+  }
 
   _encode(info) {
-    return jwt.encode(info, Jwt.KEY);
+    return jwt.encode(info, this._KEY);
   }
 
   _decode(token) {
-    return jwt.decode(token, Jwt.KEY);
+    return jwt.decode(token, this._KEY);
   }
 
-  setCookie(info) {
+  genCookie(info) {
     return `${this._COOKIE}=${this._encode(info)};`;
   }
 
-  getCookie(cookies) {
+  // setCookie(response, info) {
+  //   response.setHead('Cookie', this.genCookie(info));
+  // }
+
+  getCookie(request) {
+    let isValid = false;
+    const cookies = request.headers.cookie;
+    if(!cookies) {
+      return isValid;
+    }
     const reg = new RegExp(`${this._COOKIE}=.*;`);
     const m = cookies.match(reg);
-    let isValid = false;
-    if (m.length) {
+    if (m && m.length) {
       const c = m[0].split('=')[1].replace(';', '');
       isValid = this._decode(c);
     }
