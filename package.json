@@ -13,9 +13,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.16.1",
     "body-parser": "^1.17.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
+    "jwt-simple": "^0.5.1",
     "seneca": "^3.3.0",
     "seneca-web": "^2.0.0",
     "seneca-web-adapter-express": "^1.0.2"

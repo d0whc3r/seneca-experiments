@@ -7,7 +7,6 @@ import Login, { route as LoginRoute } from './services/login';
 
 const PORT = process.argv[2] || 4000;
 
-
 const config = {
   routes: [LoginRoute],
   adapter: require('seneca-web-adapter-express'),
@@ -22,7 +21,7 @@ const seneca = Seneca({ debug: { undead: true } })
     // .use(LoginAdmin)
     .use(Web, config)
     .ready(() => {
-      var server = seneca.export('web/context')();
+      const server = seneca.export('web/context')();
 
       server.listen(PORT, () => {
         console.log('port', PORT, process.env.NODE_ENV);
