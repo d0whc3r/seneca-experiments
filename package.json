@@ -1,0 +1,29 @@
+{
+  "name": "seneca-experiments",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production pm2 start service.config.js",
+    "dev": "NODE_ENV=development pm2 start service.config.js",
+    "monit": "pm2 monit",
+    "stop": "pm2 stop service.config.js",
+    "delete": "pm2 delete service.config.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "seneca": "^3.3.0",
+    "seneca-web": "^2.0.0",
+    "seneca-web-adapter-express": "^1.0.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
+    "babel-preset-es2016": "^6.24.1",
+    "pm2": "^2.4.6"
+  }
+}
