@@ -7,7 +7,11 @@ export default class {
     });
   }
 
-  checkToken(token) {
+  checkToken(info) {
+    if(!info || !info.access_token) {
+      return false;
+    }
+    const token = info.access_token;
     return this.axios.get('/api/user', {
       headers: {
         authorization: `Bearer ${token}`,
@@ -23,20 +27,17 @@ export default class {
     console.log('getting token with', username, password);
     return this.axios
         .post('/oauth/v2/token', {
-          headers: {
-            accept: 'application/json',
-            'content-type': 'application/json',
-          },
-        }, {
           grant_type: 'password',
           client_id: '1_developmentClientId',
           client_secret: 'developmentSecretId',
           username,
           password,
+        }, {
+          headers: {
+            'Accept': 'application/json',
+            'content-type': 'application/json',
+          },
         })
-        .then((response) => {
-          console.log('resolved', response);
-          return response.data;
-        });
+        .then((response) => response.data);
   }
 };

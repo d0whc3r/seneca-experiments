@@ -18,43 +18,47 @@ export default function(options) {
   const jwt = new Jwt();
   const auth = new Auth();
 
-  seneca.add({ role: 'auth', cmd: 'login' }, ({ request$, response$, args }, done) => {
+  seneca.add({ role: 'auth', cmd: 'login' }, (_msg, done) => {
+    const { request$, response$, args } = _msg;
     let parsed = null;
     try {
       parsed = JSON.parse(args.body, true);
-      console.log('parsed', parsed);
     } catch (error) {
       console.error('JSON ERROR', error);
-      return done(null, { error });
+      return done(null, { error: 'Unknown credentials' });
     }
-    let cookie = jwt.getCookie(request$);
+    let cookie = jwt.getCookie(request$.headers.cookie);
     console.log('cookie', cookie);
     let promise = null;
     if (!cookie) {
       // Login
-      promise = auth.login(parsed);
-      // .then((data) => {
-      //   console.log('login data', data, jwt.genCookie(data));
-      //   return data;
-      // });
+      console.log('try login');
+      promise = auth.login(parsed)
+          .then((data) => {
+            const encrypted = jwt.genCookie(data);
+            // console.log('login data', data, encrypted);
+            response$.setHeader('Cookie', encrypted);
+            return data;
+          });
       // if (cookie) {
       //   const encrypted = jwt.genCookie(cookie);
       //   response$.setHeader('Cookie', encrypted);
       // }
     } else {
       // Check info
-      promise = auth.checkToken(cookie.access_token);
+      console.log('check info');
+      promise = auth.checkToken(cookie);
     }
     if (!promise) {
       return done(null, { error: 'Server error username/password' });
     }
     promise
         .then((data) => {
-          console.log('resolved promise!', data);
+          // console.log('resolved promise!', data);
           done(null, data);
         })
         .catch(({ response }) => {
-          console.log('catch!', response.data);
+          // console.log('catch!', response.data);
           done(null, { ...response.data });
         });
   });
