@@ -25,7 +25,7 @@ export default function(options) {
       parsed = JSON.parse(args.body, true);
     } catch (error) {
       console.error('JSON ERROR', error);
-      return done(null, { error: 'Unknown credentials' });
+      // return done(null, { error: 'Unknown credentials' });
     }
     let cookie = jwt.getCookie(request$.headers.cookie);
     console.log('cookie', cookie);
