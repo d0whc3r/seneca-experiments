@@ -15,12 +15,11 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.1",
-    "body-parser": "^1.17.1",
-    "cookie-parser": "^1.4.3",
-    "express": "^4.15.2",
-    "jsonwebtoken": "^7.4.0",
+    "express": "^4.15.3",
+    "jsonwebtoken": "^7.4.1",
     "net": "^1.0.2",
     "node-rsa": "^0.4.2",
+    "pm2": "^2.4.6",
     "seneca": "^3.3.0",
     "seneca-web": "^2.0.0",
     "seneca-web-adapter-express": "^1.0.2"
@@ -29,7 +28,6 @@
     "babel-cli": "^6.24.1",
     "babel-preset-env": "^1.4.0",
     "babel-preset-es2016": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "pm2": "^2.4.6"
+    "babel-preset-stage-2": "^6.24.1"
   }
 }

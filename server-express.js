@@ -1,6 +1,8 @@
 import Seneca from 'seneca';
 import Express from 'express';
 import Web from 'seneca-web';
+
+import findPort from './common/findPort';
 import Login, { route as LoginRoute } from './services/login';
 
 const PORT = process.argv[2] || process.env.PORT || 4000;
@@ -23,8 +25,12 @@ const seneca = Seneca({
   .use(Login)
   .use(Web, config)
   .ready(() => {
-    const server = seneca.export('web/context')();
-    server.listen(PORT, () => {
-      console.log(`server started on: ${PORT}`);
-    });
+    findPort(PORT)
+      .then((goodport) => {
+        process.env.PORT = goodport;
+        const server = seneca.export('web/context')();
+        server.listen(goodport, () => {
+          console.log(`[?] server started on: ${goodport}`);
+        });
+      });
   });

@@ -1,5 +1,7 @@
-import Jwt from '../common/jwt';
-import Auth from '../common/auth';
+// import JwtManager from '../common/jwtManager';
+// import Check from '../common/check';
+import Common from '../common';
+import Auth from './auth';
 
 export const route = {
   prefix: '/auth',
@@ -15,7 +17,6 @@ export const route = {
 export default function(options) {
   const seneca = this;
   const name = 'login-service';
-  const jwt = new Jwt();
   const auth = new Auth();
 
   seneca.add({ role: 'auth', cmd: 'login' }, ({ request$, response$, args }, done) => {
@@ -28,21 +29,19 @@ export default function(options) {
       console.error('JSON ERROR', error);
       // return done(null, { error: 'Unknown credentials' });
     }
-    let cookie = jwt.getCookie(request$.headers.cookie);
+    let cookie = Common.jwtManager.getCookie(request$.headers.cookie);
     let promise = null;
     if (!cookie) {
       // Login
-      console.log('Login user', username);
       promise = auth.login(parsed)
         .then((data) => {
-          const encrypted = jwt.genCookie(data);
+          const encrypted = Common.jwtManager.genCookie(data);
           response$.setHeader('Cookie', encrypted);
           return data;
         });
     } else {
       // Check info
-      console.log('check info', cookie);
-      promise = auth.checkToken(cookie);
+      promise = Common.check.checkToken(cookie);
     }
     if (!promise) {
       return done(null, { error: 'Server error username/password' });

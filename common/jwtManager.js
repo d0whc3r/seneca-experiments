@@ -4,8 +4,10 @@ import path from 'path';
 import NodeRSA from 'node-rsa';
 
 export default class {
+// export default {
 
   constructor() {
+    console.log('constructor??!!');
     this._KEY = 'superKeyPassword';
     this._COOKIE = 'auth';
     this._KEY = {

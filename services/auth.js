@@ -7,19 +7,6 @@ export default class {
     });
   }
 
-  checkToken(info) {
-    if (!info || !info.access_token) {
-      return false;
-    }
-    const token = info.access_token;
-    return this.axios.get('/api/user', {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.data);
-  }
-
   login({ username, password }) {
     if (!username || !password) {
       return false;
