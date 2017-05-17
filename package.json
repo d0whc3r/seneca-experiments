@@ -19,6 +19,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
     "jsonwebtoken": "^7.4.0",
+    "net": "^1.0.2",
     "node-rsa": "^0.4.2",
     "seneca": "^3.3.0",
     "seneca-web": "^2.0.0",

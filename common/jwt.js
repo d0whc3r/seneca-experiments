@@ -9,6 +9,7 @@ export default class {
     this._KEY = 'superKeyPassword';
     this._COOKIE = 'auth';
     this._KEY = {
+      secure: true,
       algorithm: 'RS256',
       private: fs.readFileSync(path.resolve(__dirname, './jwtRS256.key'), { encoding: 'ascii' }),
       public: fs.readFileSync(path.resolve(__dirname, './jwtRS256.pem'), { encoding: 'ascii' }),
@@ -16,16 +17,21 @@ export default class {
   }
 
   enc(info) {
-    const signed = jwt.sign(info, this._KEY.private, { algorithm: this._KEY.algorithm });
-    const keyPublic = new NodeRSA(this._KEY.public);
-    return keyPublic.encrypt(signed, 'base64', 'ascii');
+    let result = jwt.sign(info, this._KEY.private, { algorithm: this._KEY.algorithm });
+    if (this._KEY.secure) {
+      const keyPublic = new NodeRSA(this._KEY.public);
+      result = keyPublic.encrypt(result, 'base64', 'ascii');
+    }
+    return result;
   }
 
   dec(token) {
     try {
-      const keyPrivate = new NodeRSA(this._KEY.private);
-      const decrypted = keyPrivate.decrypt(token, 'ascii');
-      return jwt.verify(decrypted, this._KEY.public, { algorithm: this._KEY.algorithm });
+      if (this._KEY.secure) {
+        const keyPrivate = new NodeRSA(this._KEY.private);
+        token = keyPrivate.decrypt(token, 'ascii');
+      }
+      return jwt.verify(token, this._KEY.public, { algorithm: this._KEY.algorithm });
     } catch (err) {
       console.error('WRONG TOKEN');
       return null;
